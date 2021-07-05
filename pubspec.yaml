@@ -14,7 +14,7 @@ description: A new Flutter application.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -25,9 +25,11 @@ dependencies:
   firebase_analytics: ^4.0.2
   cloud_firestore: ^0.12.9+2
   intl: ^0.15.8
-  geolocator: ^3.0.1
   fluttertoast: ^3.1.2
-
+  geolocator: ^5.2.0
+  flutter_sparkline: ^0.1.0
+  fl_chart: ^0.8.0
+  #drawerbehavior: ^0.0.4
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -57,13 +59,13 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - database/daily.json
     - assets/icnfb.png
     - assets/icngmail.png
     - assets/icn_twitter.png
     - assets/imgforgot.png
     - assets/logo_splash.png
     - assets/icn_coming_soon.png
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

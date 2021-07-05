@@ -1,14 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ui_collections/utils/utils.dart';
 import 'package:flutter_ui_collections/widgets/widgets.dart';
 
 class SettingPage extends StatefulWidget {
+  String email;
+  SettingPage({this.email});
   @override
-  _SettingPageState createState() => _SettingPageState();
+  _SettingPageState createState() => _SettingPageState(email);
 }
 
 class _SettingPageState extends State<SettingPage> {
+  String email;
+  _SettingPageState(this.email);
   bool isLocalNotification = false;
   bool isPushNotification = true;
   bool isPrivateAccount = true;
@@ -17,41 +22,48 @@ class _SettingPageState extends State<SettingPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Settings",
-            style:
-                TextStyle(fontFamily: "Exo2", color: textSecondaryLightColor)),
-        backgroundColor: Colors.white,
-      ),
-      body: AnnotatedRegion(
-        value: SystemUiOverlayStyle(
-            statusBarColor: backgroundColor,
-            statusBarBrightness: Brightness.light,
-            statusBarIconBrightness: Brightness.light,
-            systemNavigationBarIconBrightness: Brightness.light,
-            systemNavigationBarColor: backgroundColor),
-        child: Container(
-          color: backgroundColor,
-          child: SingleChildScrollView(
-            physics: ScrollPhysics(),
-            child: Column(
-              children: <Widget>[
-                accountSection(),
-                pushNotificationSection(),
-                getHelpSection(),
-              ],
+    return StreamBuilder(
+        stream:
+            Firestore.instance.collection('users').document(email).snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return new Text("Loading");
+          }
+          var userDocument = snapshot.data;
+          return Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              title: Text("Settings",
+                  style: TextStyle(fontFamily: "Exo2", color: Colors.white)),
+              backgroundColor: colorCurve,
             ),
-          ),
-        ),
-      ),
-    );
+            body: AnnotatedRegion(
+              value: SystemUiOverlayStyle(
+                  statusBarColor: backgroundColor,
+                  statusBarBrightness: Brightness.light,
+                  statusBarIconBrightness: Brightness.light,
+                  systemNavigationBarIconBrightness: Brightness.light,
+                  systemNavigationBarColor: backgroundColor),
+              child: Container(
+                color: backgroundColor,
+                child: SingleChildScrollView(
+                  physics: ScrollPhysics(),
+                  child: Column(
+                    children: <Widget>[
+                      accountSection(userDocument["Username"].toString()),
+                      pushNotificationSection(),
+                      getHelpSection(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   SettingSection getHelpSection() {
@@ -94,7 +106,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  SettingSection accountSection() {
+  SettingSection accountSection(String username) {
     return SettingSection(
       headerText: "Account".toUpperCase(),
       headerFontSize: 15.0,
@@ -106,7 +118,7 @@ class _SettingPageState extends State<SettingPage> {
           child: TileRow(
             label: "User Name",
             disabled: true,
-            rowValue: "harsh719",
+            rowValue: username,
             disableDivider: false,
             onTap: () {},
           ),

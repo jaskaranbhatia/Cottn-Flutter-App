@@ -16,15 +16,15 @@ class OnBoardingPage extends StatefulWidget {
 class _OnBoardingPageState extends State<OnBoardingPage> {
   final _controller = PageController();
   bool leadingVisibility = false;
-  Screen  size;
+  Screen size;
 
   final List<Widget> _pages = [
-    IntroPage("assets/onboard_1.png", "Welcome to Present!",
-        "A one stop application for managing all your attendance records."),
-    IntroPage("assets/onboard_3.png", "One touch attendance",
-        "Marking your attendace was never easier. \n \n No more wasting time on manual attendance."),
+    IntroPage("assets/onboard_1.png", "Welcome to CottN!",
+        "Predict cotton prices whenever and wherever you want!"),
+    IntroPage("assets/onboard_3.png", "24x7 CottN Market",
+        "Sell your produce at an optimum price so that you gain maximum profit"),
     IntroPage("assets/onboard_2.png", "Simplistic User Interface",
-        "Manage and Navigate through profile without any complexities! "),
+        "No more worrying about whether you priced your produce right!"),
   ];
   int currentPageIndex = 0;
 
@@ -94,26 +94,36 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               )),
           actions: <Widget>[
             Padding(
-              padding: EdgeInsets.only(top: size.getWidthPx(16), right:  size.getWidthPx(12), bottom: size.getWidthPx(12)),
+              padding: EdgeInsets.only(
+                  top: size.getWidthPx(16),
+                  right: size.getWidthPx(12),
+                  bottom: size.getWidthPx(12)),
               child: RaisedButton(
                 child: Text(
                   isLastPage ? 'DONE' : 'NEXT',
-                  style: TextStyle(fontFamily: 'Exo2',fontWeight: FontWeight.w500,fontSize: 14,color: Colors.grey.shade700),
+                  style: TextStyle(
+                      fontFamily: 'Exo2',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                      color: Colors.grey.shade700),
                 ),
                 onPressed: isLastPage
-                    ? () async{
-                  // Last Page Done Click
+                    ? () async {
+                        // Last Page Done Click
 
-                  LocalStorage.sharedInstance.writeValue(key:Constants.isOnBoard,value: "1");
+                        LocalStorage.sharedInstance
+                            .writeValue(key: Constants.isOnBoard, value: "1");
 
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
-
-                }
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()));
+                      }
                     : () {
-                  _controller.animateToPage(currentPageIndex + 1,
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeIn);
-                },
+                        _controller.animateToPage(currentPageIndex + 1,
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeIn);
+                      },
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(30.0)),
               ),
@@ -127,21 +137,21 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   Positioned pageViewFillWidget() {
     return Positioned.fill(
         child: PageView.builder(
-          controller: _controller,
-          itemCount: _pages.length,
-          itemBuilder: (BuildContext context, int index) {
-            return _pages[index % _pages.length];
-          },
-          onPageChanged: (int p) {
-            setState(() {
-              currentPageIndex = p;
-              if (currentPageIndex == 0) {
-                leadingVisibility = false;
-              } else {
-                leadingVisibility = true;
-              }
-            });
-          },
-        ));
+      controller: _controller,
+      itemCount: _pages.length,
+      itemBuilder: (BuildContext context, int index) {
+        return _pages[index % _pages.length];
+      },
+      onPageChanged: (int p) {
+        setState(() {
+          currentPageIndex = p;
+          if (currentPageIndex == 0) {
+            leadingVisibility = false;
+          } else {
+            leadingVisibility = true;
+          }
+        });
+      },
+    ));
   }
 }
